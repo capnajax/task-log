@@ -8,10 +8,16 @@
 const TaskLog = require('../TaskLog');
 //const expect = require('chai').expect;
 
+async function delay(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms);
+  })
+}
+
 describe('Crash test', function() {
   let taskLog1, taskLog2;
 
-  it ('runs through all the basic functions without crashing', function(done) {
+  it ('runs through all the basic functions without crashing', async function() {
     taskLog1 = new TaskLog('crashtest1');
     taskLog2 = new TaskLog('crashtest2');
 
@@ -21,7 +27,7 @@ describe('Crash test', function() {
         for (let log of [taskLog1, taskLog2]) {
           let idxString = `00${++i}`;
           console.log(log);
-          log.out('hi');
+          await delay(1);
           log[stream](
               `${idxString.substr(idxString.length-2)} ` +
               `message ${message} on stream ${stream}`);
@@ -30,7 +36,6 @@ describe('Crash test', function() {
     }
 
     let combinedLog = TaskLog.combine(taskLog1, taskLog2);
-    console.log({combinedLog})
     for (let log of [taskLog1, taskLog2, combinedLog]) {
       console.log('Logging', log.module);
       log.toString();
@@ -40,10 +45,9 @@ describe('Crash test', function() {
       log.toString({level: 'trace'});
       log.toString({level: 4});
       log.toString(4);
-      log.toString(() => {return true;});
+      console.log(log.toString(() => {return true;}));
     }
-  
-    done();
+
   });
 
 });

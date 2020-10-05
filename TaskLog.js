@@ -77,7 +77,7 @@ class TaskLog {
 
   normalize(message, level) {
     let result = {
-      time: Date.now(),
+      date: Date.now(),
       module: this.module,
       level: normalizeLevel(level)
     };
@@ -90,9 +90,11 @@ class TaskLog {
   }
 
   toString(filter) {
-    const writeMsg = function writeMsg(entry, type) {
-      let date = entry.date ? entry.date.toISOString() : '--unknown-date-and-time-';
-      result += `${date} ${entry.tag} ${entry.module} * ${entry.message}\n`;
+    const writeMsg = function writeMsg(entry) {
+      let date = entry.date 
+        ? new Date(entry.date).toISOString()
+        : '--unknown-date-and-time-';
+      result += `${date} ${LEVEL[entry.level].tag} ${entry.stream} ${entry.module} * ${entry.message}\n`;
     }
 
     let result = '';
