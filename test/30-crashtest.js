@@ -26,7 +26,6 @@ describe('Crash test', function() {
       for (let stream of ['out', 'err']) {
         for (let log of [taskLog1, taskLog2]) {
           let idxString = `00${++i}`;
-          console.log(log);
           await delay(1);
           log[stream](
               `${idxString.substr(idxString.length-2)} ` +
@@ -37,7 +36,7 @@ describe('Crash test', function() {
 
     let combinedLog = TaskLog.combine(taskLog1, taskLog2);
     for (let log of [taskLog1, taskLog2, combinedLog]) {
-      console.log('Logging', log.module);
+      // console.log('Logging', log.module);
       log.toString();
       log.toString('err');
       log.toString('trace');
@@ -45,7 +44,8 @@ describe('Crash test', function() {
       log.toString({level: 'trace'});
       log.toString({level: 4});
       log.toString(4);
-      console.log(log.toString(() => {return true;}));
+      log.toString(() => {return true;});
+      // console.log(log.toString(() => {return true;}));
     }
 
   });

@@ -24,7 +24,6 @@ const STREAM = {
   };
 
 function levelIsLoggable(level, minimum) {
-  console.log('levelIsLoggable:', {level, minimum});
   return (LEVEL[minimum].pri >= LEVEL[level].pri);
 }
 
@@ -42,7 +41,6 @@ function normalizeLevel(level) {
   if (_.isNil(result)) {
     throw new Error(`ProgressLog: unknown level: "${level}"`)
   }
-  console.log('normalizeLevel', level, result)
   return result;
 }
 
@@ -102,25 +100,20 @@ class TaskLog {
     // normalize the filter. After this, a filter will be a hash or
     // a function
     (() => {
-      console.log('normalizing filter', filter);
       if (_.isNil(filter)) {
         // Do nothing. There's no filter
       } else if (_.isFunction(filter)) {
         // Do nothing. The function is the filter
       } else if (_.isString(filter)) {
         if (_.has(LEVEL, filter)) {
-          console.log('LEVEL has filter for', filter);
           filter = {level: filter};
         } else if (_.has(STREAM, filter)) {
-          console.log('STREAM has filter for', filter);
           filter = {stream: filter};
         } else {
           throw new Error(`ProgressLog.toString(): Invalid filter "${filter}"`);
         }
       } else if (_.isInteger(filter)) {
-        console.log('filter is an integer');
         let level = LEVEL_VALUE[filter];
-        console.log({filter, level});
         if (_.isNil(filter)) {
           throw new Error(`ProgressLog.toString(): Invalid filter "${filter}"`);
         } else {
@@ -134,7 +127,6 @@ class TaskLog {
           } else if (_.isNumber(filter.level)) {
             filter.level = LEVEL_VALUE[filter.level]
           } else if (!_.isString(filter.level)) {
-            console.log({filter})
             throw new Error(`ProgressLog.toString(): Invalid filter "${filter}"`);
           }
         }
@@ -155,7 +147,6 @@ class TaskLog {
         } else {
           printable = true;
           if (_.has(filter, 'level')) {
-            console.log({message});
             if (!levelIsLoggable(message.level, filter.level)) {
               printable = false;
             }
